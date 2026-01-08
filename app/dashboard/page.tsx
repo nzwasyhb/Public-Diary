@@ -12,10 +12,13 @@ interface Note {
   content: string
   user_id: string
   user_email: string
+  username: string | null
+  is_public: boolean
 }
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null)
+  const [username, setUsername] = useState<string>('')
   const [notes, setNotes] = useState<Note[]>([])
   const [loading, setLoading] = useState(true)
   const router = useRouter()
@@ -32,6 +35,16 @@ export default function DashboardPage() {
       router.push('/login')
     } else {
       setUser(user)
+      // Ambil username dari profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('id', user.id)
+        .single()
+      
+      if (profile) {
+        setUsername(profile.username)
+      }
     }
     setLoading(false)
   }
@@ -77,36 +90,54 @@ export default function DashboardPage() {
   if (!user) return null
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-800">📖 Dashboard</h1>
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100">
+      <nav className="bg-white/80 backdrop-blur-lg shadow-lg border-b border-purple-100 sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+              {username.charAt(0).toUpperCase() || 'U'}
+            </div>
+            <div>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">📖 Dashboard</h1>
+              <p className="text-xs text-gray-600">@{username || user.email}</p>
+            </div>
+          </div>
           <div className="flex gap-3 items-center">
-            <span className="text-gray-600">{user.email}</span>
             <button
               onClick={() => router.push('/')}
-              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+              className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:from-blue-600 hover:to-cyan-600 transition-all shadow-md hover:shadow-lg font-semibold text-sm"
             >
-              Feed Publik
+              🌍 Feed Publik
             </button>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+              className="px-5 py-2.5 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-xl hover:from-red-600 hover:to-pink-600 transition-all shadow-md hover:shadow-lg font-semibold text-sm"
             >
-              Logout
+              👋 Logout
             </button>
           </div>
         </div>
       </nav>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Tulis Catatan Baru</h2>
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-1 h-8 bg-gradient-to-b from-purple-600 to-pink-600 rounded-full"></div>
+            <h2 className="text-3xl font-bold text-gray-800">✍️ Tulis Catatan Baru</h2>
+          </div>
           <NoteForm onSuccess={fetchNotes} />
         </div>
 
         <div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">Catatan Saya</h2>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-1 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full"></div>
+              <h2 className="text-3xl font-bold text-gray-800">📚 Catatan Saya</h2>
+            </div>
+            <div className="bg-white px-4 py-2 rounded-full shadow-md">
+              <span className="text-sm font-bold text-purple-600">{notes.length} Catatan</span>
+            </div>
+          </div>
           <div className="space-y-4">
             {notes.length > 0 ? (
               notes.map((note) => (
@@ -119,8 +150,10 @@ export default function DashboardPage() {
                 />
               ))
             ) : (
-              <div className="text-center py-12 bg-white rounded-lg shadow">
-                <p className="text-gray-500 text-lg">Belum ada catatan. Tulis yang pertama!</p>
+              <div className="text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-100">
+                <div className="text-6xl mb-4">📝</div>
+                <p className="text-gray-600 text-lg font-semibold mb-2">Belum ada catatan</p>
+                <p className="text-gray-400 text-sm">Mulai tulis catatan pertamamu sekarang!</p>
               </div>
             )}
           </div>

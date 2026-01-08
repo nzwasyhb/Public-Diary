@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Public Diary 📖
 
-## Getting Started
+Aplikasi full-stack untuk berbagi catatan dan curhat secara publik.
 
-First, run the development server:
+## 🚀 Features
+
+- ✅ **Authentication System** - Sign up, Login, Logout dengan Supabase Auth
+- ✅ **Public Feed** - Semua catatan tampil publik dan bisa dibaca siapa saja
+- ✅ **User Dashboard** - Kelola catatan pribadi Anda
+- ✅ **Row Level Security** - Keamanan tingkat database
+- ✅ **Real-time Updates** - Catatan muncul langsung setelah posting
+
+## 🛠️ Tech Stack
+
+- **Frontend:** Next.js 14 (App Router), TypeScript, Tailwind CSS
+- **Backend:** Supabase (Authentication + PostgreSQL Database)
+- **Deployment:** Vercel
+
+## 📦 Installation
+
+1. Clone repository:
+
+```bash
+git clone <your-repo-url>
+cd Public-Diary
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Setup environment variables:
+   Create `.env.local` file:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+```
+
+4. Setup Supabase database:
+   Follow instructions in [SETUP.md](./SETUP.md)
+
+5. Run development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📝 Database Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+See [SETUP.md](./SETUP.md) for complete database and deployment instructions.
 
-## Learn More
+## 🎯 How It Works
 
-To learn more about Next.js, take a look at the following resources:
+1. **Sign Up/Login** - Create account with email and password
+2. **Write Notes** - Go to Dashboard and create your notes
+3. **Public Feed** - All notes appear on home page for everyone to read
+4. **Manage Notes** - Edit and delete only your own notes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔒 Security
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Row Level Security (RLS) enforced at database level
+- Only authenticated users can create notes
+- Users can only delete their own notes
+- Public read access for all notes
 
-## Deploy on Vercel
+## 🚀 Deploy to Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Push code to GitHub
+2. Import to Vercel
+3. Add environment variables
+4. Deploy!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 License
+
+MIT
+
+## 👨‍💻 Author
+
+Built with ❤️ using Next.js and Supabase
