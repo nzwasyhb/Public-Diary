@@ -12,6 +12,11 @@ export async function GET(request: Request) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`)
     }
+    
+    // Handle specific errors
+    if (error.message.includes('expired') || error.message.includes('invalid')) {
+      return NextResponse.redirect(`${origin}/verify-email?error=expired`)
+    }
   }
 
   // return the user to an error page with instructions
