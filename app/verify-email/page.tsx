@@ -21,11 +21,17 @@ function VerifyEmailContent() {
 
     try {
       const supabase = createClient()
+      
+      // Determine the redirect URL correctly
+      const redirectUrl = typeof window !== 'undefined' 
+        ? (process.env.NEXT_PUBLIC_SITE_URL || window.location.origin)
+        : (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
+      
       const { error } = await supabase.auth.resend({
         type: 'signup',
         email: email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+          emailRedirectTo: `${redirectUrl}/auth/confirm?next=/dashboard`,
         },
       })
 
